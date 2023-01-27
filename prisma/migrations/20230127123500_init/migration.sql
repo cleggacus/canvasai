@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "canvasToken" DROP NOT NULL,
+ALTER COLUMN "canvasUrl" DROP NOT NULL;

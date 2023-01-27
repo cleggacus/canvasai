@@ -1,7 +1,9 @@
 import { signUpSchema } from '@/src/utils/validation/auth';
 import { TRPCError } from '@trpc/server';
 import { hash } from 'argon2';
-import { prisma } from '../prisma';
+import { z } from 'zod';
+import { prisma } from '../../prisma';
+import auth from '../middlewares/auth';
 import { router, procedure } from '../trpc';
 
 export const userRouter = router({
@@ -17,7 +19,7 @@ export const userRouter = router({
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "User already exists.",
+          message: "User already exists",
         });
       }
 
@@ -34,5 +36,32 @@ export const userRouter = router({
           email: result.email
         },
       };
+    }),
+  updateUserInfo: procedure
+    .input(z.object({
+      canvasToken: z.string().optional(),
+      canvasUrl: z.string().optional(),
+    }))
+    .use(auth)
+    .mutation(async ({ input, ctx }) => {
+      const id = ctx.session.id || "";
+
+      const updateCount = await prisma.user.updateMany({
+        where: {
+          id: id
+        },
+        data: input
+      })
+
+      if(updateCount.count == 0) {
+        return new TRPCError({
+          code: "BAD_REQUEST"
+        })
+      }
+
+      return {
+        status: 204,
+        message: "User info updated successfully"
+      }
     })
 });
