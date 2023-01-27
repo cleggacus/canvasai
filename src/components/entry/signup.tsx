@@ -1,17 +1,15 @@
 import useInputs from "@/src/utils/client/useInputs";
 import styles from "../../styles/signin.module.scss";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import Input from "../core/input";
-import { useRouter } from "next/router";
 import { trpc } from "@/src/utils/trpc";
 import { signUpSchema } from "@/src/utils/validation/auth";
-import { z } from "zod";
 import ErrorInput from "../core/errorInput";
 
 type SignUpInput = "email" | "password" | "repassword";
 
 const SignUp: FC = () => {
-  const router = useRouter();
+  const [success, setSuccess] = useState(false);
 
   const [emailErr, setEmailErr] = useState<string[]>([]);
   const [passwordErr, setPasswordErr] = useState<string[]>([]);
@@ -24,7 +22,14 @@ const SignUp: FC = () => {
     repassword: "",
   });
 
-  const mutation = trpc.user.signup.useMutation();
+  const mutation = trpc.user.signup.useMutation({
+    onSuccess() {
+      setSuccess(true);
+    },
+    onError(error) {
+      setGeneralErr(error.message);
+    }
+  });
 
   const checkPasswordMatch = () => {
     if(signUpData.password == signUpData.repassword) {
@@ -73,14 +78,10 @@ const SignUp: FC = () => {
       return;
 
     mutation.mutate(signUpData);
-
-    if(mutation.error) {
-      setGeneralErr(mutation.error.message);
-      return;
-    }
-
-    router.push("/");
   }
+
+  if (success)
+    return <></>
 
   return <div className={styles.signupContainer}>
     <h1 className={styles.title}>NEW ACCOUNT</h1>

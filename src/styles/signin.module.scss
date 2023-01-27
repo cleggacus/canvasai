@@ -15,7 +15,6 @@
     display: flex;
 
     min-height: 400px;
-    width: 700px;
     border-radius: 7px;
     border-width: 3px;
     border-style: solid;
@@ -39,7 +38,7 @@
       justify-content: center;
       flex:1;
       padding: 40px 40px 60px 40px;
-
+      width: 350px;
       border-style: solid;
       border-color: var(--color-fg);
 
