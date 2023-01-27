@@ -7,7 +7,12 @@ import { useRouter } from "next/router";
 
 type SignInInput = "email" | "password";
 
-const SignIn: FC = () => {
+type Props = {
+  color1: string,
+  color2: string,
+}
+
+const SignIn: FC<Props> = ({ color1, color2 }) => {
   const router = useRouter();
 
   const [error, setError] = useState("");
@@ -33,12 +38,20 @@ const SignIn: FC = () => {
     }
   }
 
-  return <div className={styles.signinContainer}>
+  return <div 
+    className={styles.signinContainer}
+    style={{ backgroundColor: color2 }}
+  >
     <h1 className={styles.title}>SIGN IN</h1>
     <Input {...setSignInData("email")} placeholder="Email"></Input>
     <Input {...setSignInData("password")} type="password" placeholder="Password"/>
     { error && <p className={styles.error}>{error}</p> }
-    <Input type="button" onClick={signInSubmit} value="SIGN IN" />
+    <Input 
+      type="button" 
+      onClick={signInSubmit} 
+      value="SIGN IN" 
+      style={{ backgroundColor: color1 }}
+    />
   </div>
 }
 

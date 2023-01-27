@@ -1,0 +1,52 @@
+.container {
+  padding: 30px 100px;
+  width: 100%;
+
+  .bar {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      color: var(--color-fg);
+    }
+  }
+
+  .dashboard {
+    padding: 20px 0;
+    display: grid;
+    justify-content: space-evenly;
+    gap: 50px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+    .item {
+      border-radius: 7px;
+      border-width: 3px;
+      border-style: solid;
+      border-color: var(--color-fg);
+      box-shadow: 7px 7px var(--color-fg);
+      height: 350px;
+    }
+
+    .item:nth-child(5n) {
+      background-color: var(--color-yellow);
+    }
+
+    .item:nth-child(5n+1) {
+      background-color: var(--color-purple);
+    }
+
+    .item:nth-child(5n+2) {
+      background-color: var(--color-orange);
+    }
+
+    .item:nth-child(5n+3) {
+      background-color: var(--color-green);
+    }
+
+    .item:nth-child(5n+4) {
+      background-color: var(--color-red);
+    }
+  }
+}

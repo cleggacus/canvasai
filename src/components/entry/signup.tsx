@@ -8,7 +8,12 @@ import ErrorInput from "../core/errorInput";
 
 type SignUpInput = "email" | "password" | "repassword";
 
-const SignUp: FC = () => {
+type Props = {
+  color1: string,
+  color2: string,
+}
+
+const SignUp: FC<Props> = ({ color1, color2 }) => {
   const [success, setSuccess] = useState(false);
 
   const [emailErr, setEmailErr] = useState<string[]>([]);
@@ -83,7 +88,10 @@ const SignUp: FC = () => {
   if (success)
     return <></>
 
-  return <div className={styles.signupContainer}>
+  return <div 
+    style={{ backgroundColor: color2}}
+    className={styles.signupContainer}
+  >
     <h1 className={styles.title}>NEW ACCOUNT</h1>
     <ErrorInput 
       error={emailErr} 
@@ -107,7 +115,12 @@ const SignUp: FC = () => {
 
     { generalErr && <p className={styles.error}>{generalErr}</p> }
 
-    <Input type="button" onClick={register} value="Create"></Input>
+    <Input 
+      type="button" 
+      onClick={register} 
+      value="Create"
+      style={{ backgroundColor: color1 }}
+    ></Input>
   </div>
 }
 
