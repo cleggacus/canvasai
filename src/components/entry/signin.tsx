@@ -1,8 +1,8 @@
 import useInputs from "@/src/utils/client/useInputs";
-import styles from "../../styles/signin.module.scss";
+import styles from "../../styles/components/entry.module.scss";
 import { signIn } from "next-auth/react";
 import { FC, useState } from "react";
-import Input from "../core/input";
+import Input from "../core/Input";
 import { useRouter } from "next/router";
 
 type SignInInput = "email" | "password";

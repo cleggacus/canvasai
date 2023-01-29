@@ -1,9 +1,10 @@
+@import '../mixins.scss';
+
 .input {
+  @include border;
+  @include curved;
+
   margin: 5px 0;
-  border-radius: 7px;
-  border-width: 3px;
-  border-style: solid;
-  border-color: var(--color-fg);
   padding: 7px 10px;
   font-size: 1em;
   font-weight: bold;
@@ -13,8 +14,9 @@
 }
 
 .input[type="button"] {
+  @include shadowHover(4px, 6px);
+
   cursor: pointer;
-  box-shadow: 4px 4px var(--color-fg);
 }
 
 .error {

@@ -1,30 +1,37 @@
-import { NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
+import { useState } from "react";
+import Box from "../components/core/Box";
 import SignIn from "../components/entry/signin";
 import SignUp from "../components/entry/signup";
-import styles from "../styles/signin.module.scss"
-const Entry: NextPage = () => {
-  const colors = [
-    "var(--color-orange)",
-    "var(--color-green)",
-    "var(--color-purple)",
-    "var(--color-yellow)",
-    "var(--color-red)",
-  ]
+import Dots from "../components/patterns/Dots";
+import styles from "../styles/components/entry.module.scss"
+import randomColor from "../utils/client/randomColor";
 
-  const randomColor = () => {
-    const i = Math.floor(Math.random() * colors.length);
-    return colors.splice(i, 1)[0];
-  }
+type Props = {
+  color1: string,
+  color2: string
+}
 
-  const color1 = randomColor();
-  const color2 = randomColor();
-
+const Entry: NextPage<Props> = ({ color1, color2 }) => {
   return <div className={styles.container}>
-    <div className={styles.innerContainer}>
-      <SignIn color1={color2} color2={color1} />
-      <SignUp color1={color1} color2={color2} />
-    </div>
+    <Dots className={styles.innerContainer}>
+      <Box className={styles.content}>
+        <SignIn color1={color2} color2={color1} />
+        <SignUp color1={color1} color2={color2} />
+      </Box>
+    </Dots>
   </div>
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const [color1, color2] = randomColor(2);
+
+  return { 
+    props: {
+      color1,
+      color2
+    } 
+  };
+};
 
 export default Entry;

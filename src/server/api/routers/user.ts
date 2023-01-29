@@ -54,7 +54,7 @@ export const userRouter = router({
       })
 
       if(updateCount.count == 0) {
-        return new TRPCError({
+        throw new TRPCError({
           code: "BAD_REQUEST"
         })
       }

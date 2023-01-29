@@ -4,7 +4,7 @@ import NextAuth, { DefaultSession } from "next-auth"
 declare module "next-auth" {
   interface Session {
     id?: string
-    hasCanvasInfo?: boolean
+    hasCanvasInfo?: boolean,
   }
 
   interface User {
@@ -18,6 +18,6 @@ declare module "next-auth/jwt" {
   interface JWT {
     id?: string
     email?: string
-    hasCanvasInfo?: boolean
+    hasCanvasInfo?: boolean,
   }
 }

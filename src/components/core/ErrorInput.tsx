@@ -1,6 +1,6 @@
 import { DetailedHTMLProps, FC, InputHTMLAttributes } from "react";
 import styles from "../../styles/components/core/input.module.scss";
-import Input from "./input";
+import Input from "./Input";
 
 type Props = DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> & {
   error: string[] | string

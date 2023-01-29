@@ -5,6 +5,34 @@ import { verify } from "argon2";
 import { prisma } from "./prisma";
 import { loginSchema } from "../utils/validation/auth";
 
+// const refreshAccessToken = async (token: JWT) => {
+//   try {
+//     const tokenResponse = await fetch('/api/auth/refreshToken', {
+//       method: "POST",
+//       body: JSON.stringify({
+//         token: token.refreshToken
+//       })
+//     })
+
+//     const data = await tokenResponse.json();
+
+//     console.log(data);
+
+//     return {
+//       ...token,
+//       accessToken: data.accessToken,
+//       accessTokenExpiry: data.accessTokenExpiry,
+//       refreshToken: data.refreshToken
+//     }
+//   } catch (error) {
+//     return {
+//       ...token,
+//       error: "RefreshAccessTokenError",
+//     }
+//   }
+
+// }
+
 export const nextAuthOptions: NextAuthOptions = {
   providers: [
     Credentials({
@@ -51,7 +79,21 @@ export const nextAuthOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email ?? undefined;
         token.hasCanvasInfo = user.hasCanvasInfo;
+      } else {
+        const updatedData = await prisma.user.findFirst({
+          where: { id: token.id },
+        });
+
+        if(updatedData) {
+          const hasCanvasInfo = 
+            updatedData.canvasToken != null && updatedData.canvasUrl != null;
+
+          token.id = updatedData.id;
+          token.email = updatedData.email;
+          token.hasCanvasInfo = hasCanvasInfo;
+        }
       }
+
 
       return token;
     },

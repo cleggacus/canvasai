@@ -1,5 +1,6 @@
 import { httpBatchLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
+import superjson from 'superjson';
 import type { AppRouter } from '../server/api/routers/_app';
 
 function getBaseUrl() {
@@ -23,6 +24,7 @@ export const trpc = createTRPCNext<AppRouter>({
           url: `${getBaseUrl()}/api/trpc`,
         }),
       ],
+      transformer: superjson
       // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
     };
   },

@@ -1,0 +1,34 @@
+@mixin border($top: true, $right: true, $bottom: $top, $left: $right) {
+  $border-width: 3px;
+
+  border-width: 
+    if($top, $border-width, 0)
+    if($right, $border-width, 0)
+    if($bottom, $border-width, 0)
+    if($left, $border-width, 0);
+
+  border-style: solid;
+  border-color: var(--color-fg);
+}
+
+@mixin curved {
+  border-radius: 7px;
+}
+
+@mixin shadow($amount: 4px) {
+  box-shadow: $amount $amount var(--color-fg);
+}
+
+@mixin shadowHover($from: 4px, $to: 10px) {
+  $diff: $to - $from;
+
+  @include shadow($from);
+  transition: 
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+
+  &:hover {
+    @include shadow($to);
+    transform: translate(-$diff, -$diff);
+  }
+}

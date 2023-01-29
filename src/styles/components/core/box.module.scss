@@ -1,0 +1,14 @@
+@import '../mixins.scss';
+
+.box {
+  @include curved;
+}
+
+.box.border {
+  @include border;
+}
+
+.box.shadow {
+  @include shadowHover;
+}
+

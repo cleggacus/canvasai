@@ -1,0 +1,51 @@
+@import './mixins.scss';
+
+.container {
+  width: 100vw;
+  height: 100vh;
+
+  .innerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+
+    * {
+      color: #31322d;
+    }
+
+    .content {
+      display: flex;
+      min-height: 400px;
+      overflow: hidden;
+      background-color: var(--color-bg);
+
+      .error {
+        color: var(--color-fg);
+        font-weight: bold;
+        margin: 10px 0;
+        text-align: center;
+        width: 100%;
+      }
+
+      .signupContainer, .signinContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex:1;
+        padding: 40px 40px 60px 40px;
+        width: 350px;
+
+        .title {
+          width: 100%;
+          text-align: center;
+          margin: 15px 0;
+        }
+      }
+
+      .signinContainer {
+        @include border(false, true, false, false);
+      }
+    }
+  }
+}

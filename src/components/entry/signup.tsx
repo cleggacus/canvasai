@@ -1,10 +1,10 @@
 import useInputs from "@/src/utils/client/useInputs";
-import styles from "../../styles/signin.module.scss";
+import styles from "../../styles/components/entry.module.scss";
 import { FC, useState } from "react";
-import Input from "../core/input";
+import Input from "../core/Input";
 import { trpc } from "@/src/utils/trpc";
 import { signUpSchema } from "@/src/utils/validation/auth";
-import ErrorInput from "../core/errorInput";
+import ErrorInput from "../core/ErrorInput";
 
 type SignUpInput = "email" | "password" | "repassword";
 
