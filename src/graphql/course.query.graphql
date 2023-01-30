@@ -1,0 +1,41 @@
+query course($courseId: ID) {
+  course(id: $courseId) {
+    name
+    imageUrl
+    modulesConnection {
+      nodes {
+        name
+        moduleItems {
+          content {
+            __typename
+            ... on Discussion {
+              title
+            }
+            ... on Assignment {
+              title: name
+            }
+            ... on File {
+              title: displayName
+            }
+            ... on ExternalTool {
+              title: name
+            }
+            ... on SubHeader {
+              title
+            }
+            ... on Page {
+              title
+            }
+            ... on ExternalUrl {
+              title
+            }
+            # ... on moduleexternaltool {
+            # }
+            # ... on quiz {
+            # }
+          }
+        }
+      }
+    }
+  }
+}

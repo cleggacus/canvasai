@@ -1,3 +1,6 @@
+import { getSdk } from "@/src/graphql/sdk";
+import { gql, GraphQLClient } from "graphql-request";
+
 export type Course = {
   id: number,
   name: string,
@@ -28,6 +31,29 @@ const getCourses = async (url: string, token: string) => {
   return data
 }
 
+const getCourse = async (url: string, token: string, courseId: string) => {
+  if(url.endsWith("/"))
+    url.slice(url.length-1, url.length);
+
+  url = `${url}/api/graphql`;
+
+
+  const graphQLClient = new GraphQLClient(url, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
+
+  const sdk = getSdk(graphQLClient);
+
+  const { data } = await sdk.course({
+    courseId
+  });
+
+  return data.course;
+}
+
 export {
-  getCourses
+  getCourses,
+  getCourse
 }

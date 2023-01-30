@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 import Box from "../components/core/Box";
 import { appRouter } from "../server/api/routers/_app";
 import { Course } from "../utils/canvas";
+import Link from "next/link";
 
 type Props = {
   email: string,
@@ -29,14 +30,19 @@ const IndexPage: NextPage<Props> = ({ email, courses }) => {
       <div className={styles.dashboard}>
         {
           courses.map(course => 
-            <Box key={course.id} className={styles.item}>
-              <div className={styles.thumb}>
-                <img src={course.image_download_url}></img>
-              </div>
+            <Box 
+              key={course.id} 
+              className={styles.item}
+            >
+              <Link href={`/course/${course.id}`}>
+                <div className={styles.thumb}>
+                  <img src={course.image_download_url}></img>
+                </div>
 
-              <div className={styles.details}>
-                <h2>{course.name}</h2>
-              </div>
+                <div className={styles.details}>
+                  <h2>{course.name}</h2>
+                </div>
+              </Link>
             </Box>
           )
         }
@@ -50,7 +56,16 @@ export const getServerSideProps = requireAuth(async (_ctx, session) => {
     session
   });
 
-  const result = await caller.canvas.getCourses();
+  let result;
+
+  try {
+    result = await caller.canvas.getCourses();
+  } catch {
+    result = {
+      courses: []
+    }
+  }
+  
 
   return { 
     props: {
