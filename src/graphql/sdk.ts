@@ -4876,7 +4876,14 @@ export type CourseQueryVariables = Exact<{
 }>;
 
 
-export type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'Course', name: string, imageUrl?: any | null, modulesConnection?: { __typename?: 'ModuleConnection', nodes?: Array<{ __typename?: 'Module', name?: string | null, moduleItems?: Array<{ __typename?: 'ModuleItem', content?: { __typename: 'Assignment', title?: string | null } | { __typename: 'Discussion', title?: string | null } | { __typename: 'ExternalTool', title?: string | null } | { __typename: 'ExternalUrl', title?: string | null } | { __typename: 'File', title?: string | null } | { __typename: 'ModuleExternalTool' } | { __typename: 'Page', title?: string | null } | { __typename: 'Quiz' } | { __typename: 'SubHeader', title?: string | null } | null }> | null } | null> | null } | null } | null };
+export type CourseQuery = { __typename?: 'Query', course?: { __typename?: 'Course', name: string, imageUrl?: any | null, modulesConnection?: { __typename?: 'ModuleConnection', nodes?: Array<{ __typename?: 'Module', name?: string | null, moduleItems?: Array<{ __typename?: 'ModuleItem', content?: { __typename: 'Assignment', id: string, title?: string | null } | { __typename: 'Discussion', id: string, title?: string | null } | { __typename: 'ExternalTool', title?: string | null } | { __typename: 'ExternalUrl', title?: string | null } | { __typename: 'File', id: string, contentType?: string | null, url?: any | null, title?: string | null } | { __typename: 'ModuleExternalTool' } | { __typename: 'Page', id: string, title?: string | null } | { __typename: 'Quiz' } | { __typename: 'SubHeader', title?: string | null } | null }> | null } | null> | null } | null } | null };
+
+export type FileQueryVariables = Exact<{
+  fileId: Scalars['ID'];
+}>;
+
+
+export type FileQuery = { __typename?: 'Query', node?: { __typename: 'Account' } | { __typename: 'Assignment' } | { __typename: 'AssignmentGroup' } | { __typename: 'AssignmentOverride' } | { __typename: 'CommentBankItem' } | { __typename: 'CommunicationChannel' } | { __typename: 'ContentTag' } | { __typename: 'Conversation' } | { __typename: 'Course' } | { __typename: 'Discussion' } | { __typename: 'DiscussionEntry' } | { __typename: 'Enrollment' } | { __typename: 'File', id: string, url?: any | null, displayName?: string | null } | { __typename: 'GradingPeriod' } | { __typename: 'Group' } | { __typename: 'GroupSet' } | { __typename: 'InternalSetting' } | { __typename: 'LearningOutcome' } | { __typename: 'LearningOutcomeGroup' } | { __typename: 'MediaObject' } | { __typename: 'MessageableContext' } | { __typename: 'MessageableUser' } | { __typename: 'Module' } | { __typename: 'ModuleItem' } | { __typename: 'Notification' } | { __typename: 'NotificationPolicy' } | { __typename: 'OutcomeCalculationMethod' } | { __typename: 'OutcomeFriendlyDescriptionType' } | { __typename: 'OutcomeProficiency' } | { __typename: 'Page' } | { __typename: 'PostPolicy' } | { __typename: 'Progress' } | { __typename: 'Quiz' } | { __typename: 'Rubric' } | { __typename: 'Section' } | { __typename: 'Submission' } | { __typename: 'Term' } | { __typename: 'User' } | null };
 
 
 export const CourseDocument = gql`
@@ -4891,12 +4898,17 @@ export const CourseDocument = gql`
           content {
             __typename
             ... on Discussion {
+              id
               title
             }
             ... on Assignment {
+              id
               title: name
             }
             ... on File {
+              id
+              contentType
+              url
               title: displayName
             }
             ... on ExternalTool {
@@ -4906,6 +4918,7 @@ export const CourseDocument = gql`
               title
             }
             ... on Page {
+              id
               title
             }
             ... on ExternalUrl {
@@ -4918,16 +4931,32 @@ export const CourseDocument = gql`
   }
 }
     `;
+export const FileDocument = gql`
+    query file($fileId: ID!) {
+  node(id: $fileId) {
+    __typename
+    ... on File {
+      id
+      url
+      displayName
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: (requestHeaders?:Record<string, string>) => Promise<T>, operationName: string, operationType?: string) => Promise<T>;
 
 
 const defaultWrapper: SdkFunctionWrapper = (action, _operationName, _operationType) => action();
 const CourseDocumentString = print(CourseDocument);
+const FileDocumentString = print(FileDocument);
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
     course(variables?: CourseQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data: CourseQuery; extensions?: any; headers: Dom.Headers; status: number; }> {
         return withWrapper((wrappedRequestHeaders) => client.rawRequest<CourseQuery>(CourseDocumentString, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'course', 'query');
+    },
+    file(variables: FileQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<{ data: FileQuery; extensions?: any; headers: Dom.Headers; status: number; }> {
+        return withWrapper((wrappedRequestHeaders) => client.rawRequest<FileQuery>(FileDocumentString, variables, {...requestHeaders, ...wrappedRequestHeaders}), 'file', 'query');
     }
   };
 }

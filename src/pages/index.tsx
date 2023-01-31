@@ -36,7 +36,7 @@ const IndexPage: NextPage<Props> = ({ email, courses }) => {
             >
               <Link href={`/course/${course.id}`}>
                 <div className={styles.thumb}>
-                  <img src={course.image_download_url}></img>
+                  <img src={course.image}></img>
                 </div>
 
                 <div className={styles.details}>

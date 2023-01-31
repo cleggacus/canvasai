@@ -9,7 +9,7 @@
     .thumbnail {
       position: relative;
       width: 100%;
-      height: 300px;
+      height: 200px;
       overflow: hidden;
       background-color: var(--color-bg);
 
@@ -22,7 +22,6 @@
         padding: 20px 40px;
 
         h1 {
-          font-size: 2.5em;
           color: var(--color-fg);
         }
       }
@@ -46,13 +45,57 @@
       width: 100%;
       margin: 50px 0 0 0;
       padding: 20px 40px;
-      background-color: var(--color-green);
+      background-color: var(--color-yellow);
 
       display: flex;
       flex-direction: column;
 
       input {
         margin: 10px 0;
+      }
+
+      h1, h2 {
+        color: var(--color-fg);
+      }
+    }
+
+    .module:nth-child(5n+1) {
+      background-color: var(--color-purple);
+
+      input[type="button"] {
+        background-color: var(--color-yellow);
+      }
+    }
+
+    .module:nth-child(5n) {
+      background-color: var(--color-yellow);
+
+      input[type="button"] {
+        background-color: var(--color-orange);
+      }
+    }
+
+    .module:nth-child(5n+2) {
+      background-color: var(--color-orange);
+
+      input[type="button"] {
+        background-color: var(--color-green);
+      }
+    }
+
+    .module:nth-child(5n+3) {
+      background-color: var(--color-green);
+
+      input[type="button"] {
+        background-color: var(--color-red);
+      }
+    }
+
+    .module:nth-child(5n+4) {
+      background-color: var(--color-red);
+
+      input[type="button"] {
+        background-color: var(--color-purple);
       }
     }
   }

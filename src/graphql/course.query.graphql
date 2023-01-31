@@ -9,12 +9,17 @@ query course($courseId: ID) {
           content {
             __typename
             ... on Discussion {
+              id
               title
             }
             ... on Assignment {
+              id
               title: name
             }
             ... on File {
+              id
+              contentType
+              url
               title: displayName
             }
             ... on ExternalTool {
@@ -24,6 +29,7 @@ query course($courseId: ID) {
               title
             }
             ... on Page {
+              id
               title
             }
             ... on ExternalUrl {

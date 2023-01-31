@@ -73,7 +73,7 @@ const Dots: FC<Props> = ({ className, children, ...other }) => {
     const distY = mousePos.y - y;
     const dist = Math.pow(Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2)), 0.75);
 
-    ctx.globalAlpha = Math.min(50/dist, 1);
+    ctx.globalAlpha = Math.min((ctx.canvas.width/20)/dist, 1);
 
     ctx.beginPath()
     ctx.arc(x, y, r, 0, 2 * Math.PI);

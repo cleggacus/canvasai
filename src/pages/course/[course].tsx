@@ -4,6 +4,8 @@ import Layout from "@/src/components/layout/layout";
 import { appRouter, RouterOutput } from "@/src/server/api/routers/_app";
 import { requireAuth } from "@/src/utils/client/requireAuth";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import styles from "../../styles/course.module.scss"
 
 
@@ -12,14 +14,11 @@ type Props = {
 }
 
 const Course: NextPage<Props> = ({ course }) => {
-  const color = {
-    "Assignment": "var(--color-purple)",
-    "Discussion": "var(--color-orange)",
-    "ExternalTool": "var(--color-green)",
-    "ExternalUrl": "var(--color-green)",
-    "File": "var(--color-yellow)",
-    "Page": "var(--color-red)",
-  }
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log(course);
+  }, [])
 
   return <Layout>
     <div className={styles.container}>
@@ -48,11 +47,28 @@ const Course: NextPage<Props> = ({ course }) => {
                     return <h2>{item?.content?.title}</h2>
                   } 
 
+                  if(item?.content?.__typename == "File") {
+                    const url: string = item.content.url || "";
+
+                    if(item.content.contentType == "application/pdf") {
+                      return <Input
+                        type="button"
+                        value={item?.content?.title || ""}
+                        onClick={async () => {
+                          router.push(url)
+                        }}
+                        style={{
+                          // backgroundColor: color[item?.content?.__typename || "Page"]
+                        }}
+                      />
+                    }
+                  }
+
                   return <Input
                     type="button"
                     value={item?.content?.title || ""}
                     style={{
-                      backgroundColor: color[item?.content?.__typename || "Page"]
+                      // backgroundColor: color[item?.content?.__typename || "Page"]
                     }}
                   />
                 })
@@ -75,6 +91,7 @@ export const getServerSideProps = requireAuth(async (ctx, session) => {
   const result = await caller.canvas.getCourse({
     id: course as string
   });
+
 
   return { 
     props: {

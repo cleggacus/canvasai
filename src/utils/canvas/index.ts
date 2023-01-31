@@ -1,18 +1,19 @@
 import { getSdk } from "@/src/graphql/sdk";
+import fs from "fs";
 import { gql, GraphQLClient } from "graphql-request";
 
 export type Course = {
   id: number,
   name: string,
-  image_download_url: string,
-  created_at: string,
+  image: string,
 }
 
 const applyToken = (url: string, token: string) => {
   let urlObj = new URL(url);
   urlObj.searchParams.set("access_token", token);
   urlObj.searchParams.set("per_page", "100");
-  urlObj.searchParams.set("include[]", "course_image")
+  urlObj.searchParams.append("include[]", "course_image")
+  urlObj.searchParams.append("include[]", "favorites")
   urlObj.searchParams.set("enrollment_state", "active")
   urlObj.searchParams.set("state", "available")
   urlObj.searchParams.set("exclude_blueprint_courses", "true")
@@ -24,11 +25,17 @@ const getCourses = async (url: string, token: string) => {
     url.slice(url.length-1, url.length);
 
   const response = await fetch(applyToken(`${url}/api/v1/courses/`, token));
-  const data = await response.json() as Course[];
+  const data = await response.json() as any[];
 
-  data.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
+  const formated =  data
+    .filter(val => val.is_favorite)
+    .map(val => ({
+      id: val.id,
+      name: val.name,
+      image: val.image_download_url
+    }));
 
-  return data
+  return formated;
 }
 
 const getCourse = async (url: string, token: string, courseId: string) => {
@@ -53,7 +60,41 @@ const getCourse = async (url: string, token: string, courseId: string) => {
   return data.course;
 }
 
+const getFile = async (url: string, token: string, fileId: string) => {
+  if(url.endsWith("/"))
+    url.slice(url.length-1, url.length);
+
+  url = `${url}/api/graphql`;
+
+
+  const graphQLClient = new GraphQLClient(url, {
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  })
+
+  const sdk = getSdk(graphQLClient);
+
+  const { data } = await sdk.file({
+    fileId
+  });
+
+  if(data.node?.__typename == "File") {
+    return {
+      ...data.node,
+    }
+  }
+
+  return undefined;
+}
+
+const downloadFile = (async (url: string, path: string) => {
+  
+});
+
+
 export {
   getCourses,
-  getCourse
+  getCourse,
+  getFile
 }

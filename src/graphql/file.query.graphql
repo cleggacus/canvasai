@@ -1,0 +1,10 @@
+query file($fileId: ID!) {
+  node(id: $fileId) {
+    __typename
+    ... on File {
+      id
+      url
+      displayName
+    }
+  }
+}
