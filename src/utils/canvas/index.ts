@@ -1,12 +1,7 @@
-import { getSdk } from "@/src/graphql/sdk";
 import fs from "fs";
-import { gql, GraphQLClient } from "graphql-request";
-
-export type Course = {
-  id: number,
-  name: string,
-  image: string,
-}
+import https from "https";
+import downloadFile from "./download";
+import courses from "./courses";
 
 const applyToken = (url: string, token: string) => {
   let urlObj = new URL(url);
@@ -24,74 +19,42 @@ const getCourses = async (url: string, token: string) => {
   if(url.endsWith("/"))
     url.slice(url.length-1, url.length);
 
-  const response = await fetch(applyToken(`${url}/api/v1/courses/`, token));
-  const data = await response.json() as any[];
+  const data = await courses({
+    url, 
+    token,
+    params: {
+      include: ["course_image", "banner_image", "favorites"]
+    }
+  });
 
-  const formated =  data
-    .filter(val => val.is_favorite)
-    .map(val => ({
-      id: val.id,
-      name: val.name,
-      image: val.image_download_url
-    }));
-
-  return formated;
+  return data;
 }
 
 const getCourse = async (url: string, token: string, courseId: string) => {
-  if(url.endsWith("/"))
-    url.slice(url.length-1, url.length);
-
-  url = `${url}/api/graphql`;
-
-
-  const graphQLClient = new GraphQLClient(url, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  })
-
-  const sdk = getSdk(graphQLClient);
-
-  const { data } = await sdk.course({
-    courseId
-  });
-
-  return data.course;
+  return {}
 }
 
 const getFile = async (url: string, token: string, fileId: string) => {
-  if(url.endsWith("/"))
-    url.slice(url.length-1, url.length);
-
-  url = `${url}/api/graphql`;
-
-
-  const graphQLClient = new GraphQLClient(url, {
-    headers: {
-      authorization: `Bearer ${token}`,
-    },
-  })
-
-  const sdk = getSdk(graphQLClient);
-
-  const { data } = await sdk.file({
-    fileId
-  });
-
-  if(data.node?.__typename == "File") {
-    return {
-      ...data.node,
-    }
-  }
-
-  return undefined;
+  return {}
 }
 
-const downloadFile = (async (url: string, path: string) => {
-  
-});
+// const fetchFile = async (url: string, token: string) => {
+//   const response = await fetch(url, {
+//     headers: {
+//       authorization: `Bearer ${token}`,
+//     }
+//   })  
 
+//   const arrayBuffer = await response.arrayBuffer();
+//   const buffer = Buffer.from(arrayBuffer);
+
+//   const v = new URL(url);
+//   v.searchParams.set("verifier", token);
+
+//   downloadFile(v.toString(), "file.pdf");
+
+//   return buffer.toString("base64");
+// }
 
 export {
   getCourses,

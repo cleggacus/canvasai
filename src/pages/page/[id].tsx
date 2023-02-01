@@ -22,10 +22,10 @@ export const getServerSideProps = requireAuth(async (ctx, session) => {
 
   return { 
     props: {
-      course: result
+      // course: result
     } 
   };
 });
 
-export default Course;
+export default Page;
 

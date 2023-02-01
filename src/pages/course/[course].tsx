@@ -24,14 +24,14 @@ const Course: NextPage<Props> = ({ course }) => {
     <div className={styles.container}>
       <div className={styles.content}>
         <Box className={styles.thumbnail}>
-          <img src={course?.imageUrl} />
+          {/* <img src={course?.imageUrl} /> */}
 
           <div className={styles.info}>
-            <h1>{course?.name}</h1>
+            {/* <h1>{course?.name}</h1> */}
           </div>
         </Box>
 
-        {
+        {/* {
           course?.modulesConnection?.nodes?.map(node => 
             <Box className={styles.module}>
               <h1>{node?.name}</h1>
@@ -48,14 +48,14 @@ const Course: NextPage<Props> = ({ course }) => {
                   } 
 
                   if(item?.content?.__typename == "File") {
-                    const url: string = item.content.url || "";
+                    const id: string = item.content.id || "";
 
                     if(item.content.contentType == "application/pdf") {
                       return <Input
                         type="button"
                         value={item?.content?.title || ""}
                         onClick={async () => {
-                          router.push(url)
+                          router.push(`/file/pdf/${id}`)
                         }}
                         style={{
                           // backgroundColor: color[item?.content?.__typename || "Page"]
@@ -75,7 +75,7 @@ const Course: NextPage<Props> = ({ course }) => {
               }
             </Box> 
           )
-        }
+        } */}
       </div>
     </div>
   </Layout>

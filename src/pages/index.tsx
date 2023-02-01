@@ -6,15 +6,22 @@ import Input from "../components/core/Input";
 import { signOut } from "next-auth/react";
 import Box from "../components/core/Box";
 import { appRouter } from "../server/api/routers/_app";
-import { Course } from "../utils/canvas";
 import Link from "next/link";
+import { Course } from "../utils/canvas/courses";
+import { useEffect } from "react";
 
 type Props = {
-  email: string,
   courses: Course[]
 }
 
-const IndexPage: NextPage<Props> = ({ email, courses }) => {
+const IndexPage: NextPage<Props> = ({ courses }) => {
+  useEffect(() => {
+    console.log(courses.map(course => ({
+      name: course.name,
+      fav: course.is_favorite
+    })));
+  }, [])
+
   return <Layout>
     <div className={styles.container}>
       <div className={styles.bar}>
@@ -29,22 +36,24 @@ const IndexPage: NextPage<Props> = ({ email, courses }) => {
 
       <div className={styles.dashboard}>
         {
-          courses.map(course => 
-            <Box 
-              key={course.id} 
-              className={styles.item}
-            >
-              <Link href={`/course/${course.id}`}>
-                <div className={styles.thumb}>
-                  <img src={course.image}></img>
-                </div>
+          courses
+            .filter(course => course.is_favorite)
+            .map(course => 
+              <Box 
+                key={course.id} 
+                className={styles.item}
+              >
+                <Link href={`/course/${course.id}`}>
+                  <div className={styles.thumb}>
+                    <img src={course.image_download_url}></img>
+                  </div>
 
-                <div className={styles.details}>
-                  <h2>{course.name}</h2>
-                </div>
-              </Link>
-            </Box>
-          )
+                  <div className={styles.details}>
+                    <h2>{course.name}</h2>
+                  </div>
+                </Link>
+              </Box>
+            )
         }
       </div>
     </div>
@@ -69,7 +78,6 @@ export const getServerSideProps = requireAuth(async (_ctx, session) => {
 
   return { 
     props: {
-      email: session.user?.email,
       ...result
     } 
   };

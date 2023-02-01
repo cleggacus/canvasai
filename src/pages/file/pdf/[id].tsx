@@ -17,10 +17,6 @@ const File: NextPage<Props> = ({ file }) => {
   const [numPages, setNumPages] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
 
-  useEffect(() => {
-    console.log(file?.pdf)
-  }, [])
-
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
   }
@@ -30,17 +26,17 @@ const File: NextPage<Props> = ({ file }) => {
       <div className={styles.content}>
         <Box className={styles.thumbnail}>
           <div className={styles.info}>
-            <h1>{file?.displayName}</h1>
+            {/* <h1>{file?.displayName}</h1> */}
           </div>
         </Box>
 
         <Box>
-          <Document
-            file={URL.createObjectURL(new Blob([file?.pdf || ""]))}
-            onLoadSuccess={onDocumentLoadSuccess}
-          >
-            <Page pageNumber={pageNumber} />
-          </Document>
+          <object
+            type="application/pdf"
+            // data={`data:application/pdf;base64,${file?.fileData}`}
+            height="400px"
+            width="400px"
+          />
         </Box>
       </div>
     </div>
