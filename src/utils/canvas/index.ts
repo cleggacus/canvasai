@@ -2,6 +2,7 @@ import fs from "fs";
 import https from "https";
 import downloadFile from "./download";
 import courses from "./courses";
+import course from "./course";
 
 const applyToken = (url: string, token: string) => {
   let urlObj = new URL(url);
@@ -15,23 +16,24 @@ const applyToken = (url: string, token: string) => {
   return urlObj.toString()
 }
 
-const getCourses = async (url: string, token: string) => {
-  if(url.endsWith("/"))
-    url.slice(url.length-1, url.length);
-
-  const data = await courses({
+const getCourses = (url: string, token: string) => {
+  return courses({
     url, 
     token,
     params: {
       include: ["course_image", "banner_image", "favorites"]
     }
   });
-
-  return data;
 }
 
-const getCourse = async (url: string, token: string, courseId: string) => {
-  return {}
+const getCourse = (url: string, token: string, courseId: number) => {
+  return course(courseId, {
+    url, 
+    token,
+    params: {
+      include: ["course_image", "banner_image", "favorites"]
+    }
+  });
 }
 
 const getFile = async (url: string, token: string, fileId: string) => {

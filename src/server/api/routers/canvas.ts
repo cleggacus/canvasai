@@ -60,7 +60,7 @@ export const canvasRouter = router({
   getCourse: procedure
     .use(auth)
     .input(z.object({
-      id: z.string()
+      id: z.number()
     }))
     .query(async ({ ctx, input }) => {
       const id = ctx.session?.id || "";

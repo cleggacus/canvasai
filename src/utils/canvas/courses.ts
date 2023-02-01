@@ -160,7 +160,7 @@ type CourseRequestParams = {
   include: CourseIncludeParam[]
 }
 
-type RequestCoursesOptions = Omit<RequestOptions, "params"> & {
+export type RequestCoursesOptions = Omit<RequestOptions, "params"> & {
   params?: Partial<CourseRequestParams>
 };
 

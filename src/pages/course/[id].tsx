@@ -4,8 +4,6 @@ import Layout from "@/src/components/layout/layout";
 import { appRouter, RouterOutput } from "@/src/server/api/routers/_app";
 import { requireAuth } from "@/src/utils/client/requireAuth";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import styles from "../../styles/course.module.scss"
 
 
@@ -14,20 +12,17 @@ type Props = {
 }
 
 const Course: NextPage<Props> = ({ course }) => {
-  const router = useRouter();
-
-  useEffect(() => {
-    console.log(course);
-  }, [])
+  if(!course)
+    return <Layout></Layout>
 
   return <Layout>
     <div className={styles.container}>
       <div className={styles.content}>
         <Box className={styles.thumbnail}>
-          {/* <img src={course?.imageUrl} /> */}
+          <img src={course.image_download_url} />
 
           <div className={styles.info}>
-            {/* <h1>{course?.name}</h1> */}
+            <h1>{course.name}</h1>
           </div>
         </Box>
 
@@ -82,15 +77,19 @@ const Course: NextPage<Props> = ({ course }) => {
 }
 
 export const getServerSideProps = requireAuth(async (ctx, session) => {
-  const { course } = ctx.query;
+  let { id } = ctx.query;
 
-  const caller = appRouter.createCaller({
-    session
-  });
+  let result: RouterOutput['canvas']['getCourse'] | undefined = undefined;
 
-  const result = await caller.canvas.getCourse({
-    id: course as string
-  });
+  if(typeof id == "string") {
+    const caller = appRouter.createCaller({
+      session
+    });
+
+    result = await caller.canvas.getCourse({
+      id: parseInt(id)
+    });
+  }
 
 
   return { 

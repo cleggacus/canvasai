@@ -6,7 +6,7 @@ import FinishSetup from "./finishSetup"
 import Navbar from "./navbar"
 
 type Props = {
-  children: ReactNode
+  children?: ReactNode
 }
 
 const Layout: FC<Props> = ({ children }) => {

@@ -5,14 +5,12 @@ import styles from "../styles/index.module.scss";
 import Input from "../components/core/Input";
 import { signOut } from "next-auth/react";
 import Box from "../components/core/Box";
-import { appRouter } from "../server/api/routers/_app";
+import { appRouter, RouterOutput } from "../server/api/routers/_app";
 import Link from "next/link";
 import { Course } from "../utils/canvas/courses";
 import { useEffect } from "react";
 
-type Props = {
-  courses: Course[]
-}
+type Props = RouterOutput['canvas']['getCourses'];
 
 const IndexPage: NextPage<Props> = ({ courses }) => {
   useEffect(() => {
